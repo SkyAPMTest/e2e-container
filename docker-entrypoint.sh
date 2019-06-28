@@ -30,8 +30,8 @@ export WEBAPP_PORT=${WEBAPP_PORT:-8080}
 
 export AGENT_HOME=${AGENT_HOME:-agent}
 
-export CLIENT_HOME=${CLIENT_HOME:-/home}
-export CLIENT_JAR=${CLIENT_JAR:-client.jar}
+export SERVICE_HOME=${SERVICE_HOME:-/home}
+export INSTRUMENTED_SERVICE=${INSTRUMENTED_SERVICE:-instrumented-service.jar}
 
 sh bin/oapService.sh > /dev/null 2>&1 &
 sh bin/webappService.sh > /dev/null 2>&1 &
@@ -72,13 +72,13 @@ fi
 
 echo "web app is ready for connections"
 
-mkdir -p ${CLIENT_HOME}/logs/
+mkdir -p ${SERVICE_HOME}/logs/
 
-for jar in $(printenv | grep -e '^CLIENT_JAR'); do
+for jar in $(printenv | grep -e '^INSTRUMENTED_SERVICE'); do
     java ${JAVA_OPTS} \
         -javaagent:${AGENT_HOME}/skywalking-agent.jar \
         -DSW_AGENT_COLLECTOR_BACKEND_SERVICES=${OAP_HOST}:${OAP_PORT} \
-        -jar ${CLIENT_HOME}/${jar/CLIENT_JAR*=/} > ${CLIENT_HOME}/logs/${jar/CLIENT_JAR*=/}.log 2>&1 &
+        -jar ${SERVICE_HOME}/${jar/INSTRUMENTED_SERVICE*=/} > ${SERVICE_HOME}/logs/${jar/INSTRUMENTED_SERVICE*=/}.log 2>&1 &
 done
 
-tail -f ${OAP_HOME}/logs/* ${WEBAPP_HOME}/logs/* ${CLIENT_HOME}/logs/*
+tail -f ${OAP_HOME}/logs/* ${WEBAPP_HOME}/logs/* ${SERVICE_HOME}/logs/*
