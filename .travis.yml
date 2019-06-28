@@ -7,5 +7,5 @@ jobs:
     - stage: build docker image
       script:
         - docker build -t e2e-container .
-        - docker tag e2e-server skyapm/e2e-container:1.0.0
+        - docker tag e2e-container skyapm/e2e-container:1.0.0
         - docker images
