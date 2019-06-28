@@ -6,7 +6,6 @@ jobs:
   include:
     - stage: build docker image
       script:
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker build -t e2e-container .
         - docker tag e2e-server skyapm/e2e-container:1.0.0
-        - docker push skyapm/e2e-container:1.0.0
+        - docker images

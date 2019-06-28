@@ -1,4 +1,4 @@
-# Licensed to the Apache Software Foundation (ASF) under one
+# Licensed to the SkyAPM under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
 # regarding copyright ownership.  The ASF licenses this file
@@ -19,7 +19,7 @@ FROM openjdk:8-jre-alpine
 LABEL maintainer="kezhenxu94@apache.org"
 
 EXPOSE 8080 11800 12800
-EXPOSE 9090 9091 9092
+EXPOSE 9090 9091 9092 9093 9094
 
 ENV SW_HOME=/skywalking
 

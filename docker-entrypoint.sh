@@ -1,4 +1,4 @@
-# Licensed to the Apache Software Foundation (ASF) under one
+# Licensed to the SkyAPM under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
 # regarding copyright ownership.  The ASF licenses this file
@@ -29,6 +29,8 @@ export WEBAPP_HOST=${WEBAPP_HOST:-localhost}
 export WEBAPP_PORT=${WEBAPP_PORT:-8080}
 
 export AGENT_HOME=${AGENT_HOME:-agent}
+
+export CLIENT_HOME=${CLIENT_HOME:-/home}
 export CLIENT_JAR=${CLIENT_JAR:-client.jar}
 
 sh bin/oapService.sh > /dev/null 2>&1 &
@@ -70,9 +72,13 @@ fi
 
 echo "web app is ready for connections"
 
-java ${JAVA_OPTS} \
-    -javaagent:${AGENT_HOME}/skywalking-agent.jar \
-    -DSW_AGENT_COLLECTOR_BACKEND_SERVICES=${OAP_HOST}:${OAP_PORT} \
-    -jar /home/${CLIENT_JAR} > /home/client.log 2>&1 &
+mkdir -p ${CLIENT_HOME}/logs/
 
-tail -f ${OAP_HOME}/logs/* ${WEBAPP_HOME}/logs/* /home/client.log
+for jar in $(printenv | grep -e '^CLIENT_JAR'); do
+    java ${JAVA_OPTS} \
+        -javaagent:${AGENT_HOME}/skywalking-agent.jar \
+        -DSW_AGENT_COLLECTOR_BACKEND_SERVICES=${OAP_HOST}:${OAP_PORT} \
+        -jar ${CLIENT_HOME}/${jar/CLIENT_JAR*=/} > ${CLIENT_HOME}/logs/${jar/CLIENT_JAR*=/}.log 2>&1 &
+done
+
+tail -f ${OAP_HOME}/logs/* ${WEBAPP_HOME}/logs/* ${CLIENT_HOME}/logs/*
