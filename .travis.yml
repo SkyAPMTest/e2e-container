@@ -4,7 +4,8 @@ dist: trusty
 
 jobs:
   include:
-    - stage: build docker image
+    - if: branch = master AND tag IS present
+      stage: build docker image
       script:
         - docker build -t e2e-container .
         - docker tag e2e-container skyapm/e2e-container:1.0.0
