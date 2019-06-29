@@ -7,6 +7,8 @@ jobs:
     - if: tag IS present
       stage: build docker image
       script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker build -t e2e-container .
         - docker tag e2e-container skyapm/e2e-container:${TRAVIS_TAG}
         - docker images
+        - docker push skyapm/e2e-container:${TRAVIS_TAG}
