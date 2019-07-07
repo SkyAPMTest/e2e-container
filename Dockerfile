@@ -18,35 +18,19 @@ FROM openjdk:8-jre-alpine
 
 LABEL maintainer="kezhenxu94@apache.org"
 
-ENV SW_HOME=/skywalking
+ENV SW_HOME=/sw
 ENV ZK_HOME=/zk
 ENV ES_HOME=/es
 
-# MODE: standalone/cluster
-# standalone: will start only one OAP server
-# cluster: will start a cluster coordinator (ZK) and multiple OAP servers
-ENV MODE=standalone
-
 EXPOSE 8081 8082
-EXPOSE 11800 12800 11801 12801
-EXPOSE 2181 9200
-EXPOSE 9090 9091 9092 9093 9094
-
-RUN apk update && apk add bash
+EXPOSE 9090 9091
 
 VOLUME $SW_HOME
 VOLUME $ZK_HOME
 VOLUME $ES_HOME
 
-WORKDIR $ZK_HOME
-RUN wget http://mirror.bit.edu.cn/apache/zookeeper/zookeeper-3.5.5/apache-zookeeper-3.5.5-bin.tar.gz
-#COPY apache-zookeeper-3.5.5-bin.tar.gz .
-
-WORKDIR $ES_HOME
-RUN wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.3.2.tar.gz
-#COPY elasticsearch-oss-6.3.2.tar.gz .
+RUN apk update && apk add bash
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-COPY clusterize.awk /clusterize.awk
 
 ENTRYPOINT ["bash", "/docker-entrypoint.sh"]
