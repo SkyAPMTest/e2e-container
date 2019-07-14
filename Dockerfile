@@ -18,15 +18,19 @@ FROM openjdk:8-jre-alpine
 
 LABEL maintainer="kezhenxu94@apache.org"
 
-EXPOSE 8080 11800 12800
-EXPOSE 9090 9091 9092 9093 9094
+ENV SW_HOME=/sw
+ENV ZK_HOME=/zk
+ENV ES_HOME=/es
 
-ENV SW_HOME=/skywalking
+EXPOSE 8081 8082
+EXPOSE 9090 9091
 
 VOLUME $SW_HOME
+VOLUME $ZK_HOME
+VOLUME $ES_HOME
 
-WORKDIR $SW_HOME
+RUN apk update && apk add bash
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
-ENTRYPOINT ["sh", "/docker-entrypoint.sh"]
+ENTRYPOINT ["bash", "/docker-entrypoint.sh"]
