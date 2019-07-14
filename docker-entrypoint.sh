@@ -173,7 +173,7 @@ start_oap() {
     else
         bash bin/oapServiceNoInit.sh > /dev/null 2>&1 &
     fi
-    check_times=30
+    check_times=120
     check_interval=10
 
     check_tcp ${SW_CORE_GRPC_HOST} \
@@ -268,6 +268,7 @@ start_instrumented_services() {
 
         cmd="java ${JAVA_OPTS} \
             ${opts} \
+            -DLOGGING_DIR=/tmp/logs/agent
             -javaagent:${AGENT_HOME}/skywalking-agent.jar \
             -jar ${SERVICE_HOME}/${jar} \
             ${args}"
