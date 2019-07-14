@@ -4,8 +4,13 @@ dist: trusty
 
 jobs:
   include:
+    - stage: build docker image
+      script:
+        - docker build -t e2e-container .
+        - docker images
+  include:
     - if: tag IS present
-      stage: build docker image
+      stage: push docker image
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker build -t e2e-container .
