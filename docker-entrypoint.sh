@@ -70,14 +70,14 @@ check_tcp() {
     local checking_message=$5
 
     for i in $(seq 1 ${count}); do
-        nc -z ${host} ${port}
+        timeout 3 bash -c "cat < /dev/null > /dev/tcp/$host/$port"
         if [[ $? -ne 0 ]]; then
-            [[ ! -z checking_message ]] && echo ${checking_message}
+            [[ -n $checking_message ]] && echo ${checking_message}
             sleep 10
         fi
     done
 
-    nc -zv ${host} ${port}
+    timeout 3 bash -c "cat < /dev/null > /dev/tcp/$host/$port"
 }
 
 #######################################
@@ -169,9 +169,9 @@ start_oap() {
     cd ${SW_HOME}/
 
     if test "${mode}" = "init"; then
-        bash bin/oapService.sh > /dev/null 2>&1 &
+        bash -x bin/oapService.sh > /dev/null 2>&1 &
     else
-        bash bin/oapServiceNoInit.sh > /dev/null 2>&1 &
+        bash -x bin/oapServiceNoInit.sh > /dev/null 2>&1 &
     fi
     check_times=120
     check_interval=10
@@ -295,5 +295,5 @@ fi
 
 for script in $(ls /rc.d | sort); do
     echo "executing script: $script..."
-    bash /rc.d/${script}
+    bash -x /rc.d/${script}
 done
