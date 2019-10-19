@@ -34,7 +34,7 @@ jobs:
       stage: build and deploy docker image for JDK11
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker build -f Dockerfile-JDK10 -t e2e-container-jdk11 .
+        - docker build -f Dockerfile-JDK11 -t e2e-container-jdk11 .
         - docker tag e2e-container-jdk11 skyapm/e2e-container:jdk11-${TRAVIS_TAG}
         - docker images
         - docker push skyapm/e2e-container:jdk11-${TRAVIS_TAG}
