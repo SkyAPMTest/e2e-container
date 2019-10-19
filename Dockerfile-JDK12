@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM openjdk:8-jre-alpine
+FROM adoptopenjdk/openjdk12:latest
 
 LABEL maintainer="kezhenxu94@apache.org"
 
@@ -29,8 +29,6 @@ EXPOSE 9090 9091
 VOLUME $SW_HOME
 VOLUME $ZK_HOME
 VOLUME $ES_HOME
-
-RUN apk update && apk add bash
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 

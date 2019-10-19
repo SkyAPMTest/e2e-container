@@ -5,10 +5,37 @@ dist: trusty
 jobs:
   include:
     - if: tag IS present
-      stage: build docker image
+      stage: build docker image for JDK8
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker build -t e2e-container .
-        - docker tag e2e-container skyapm/e2e-container:${TRAVIS_TAG}
+        - docker build -f Dockerfile-JDK8 -t e2e-container .
+        - docker tag e2e-container skyapm/e2e-container:jdk8-${TRAVIS_TAG}
+        - docker images
+        - docker push skyapm/e2e-container:${TRAVIS_TAG}
+
+    - if: tag IS present
+      stage: build docker image for JDK9
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -f Dockerfile-JDK9 -t e2e-container .
+        - docker tag e2e-container skyapm/e2e-container:jdk9-${TRAVIS_TAG}
+        - docker images
+        - docker push skyapm/e2e-container:${TRAVIS_TAG}
+
+    - if: tag IS present
+      stage: build docker image for JDK10
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -f Dockerfile-JDK10 -t e2e-container .
+        - docker tag e2e-container skyapm/e2e-container:jdk10-${TRAVIS_TAG}
+        - docker images
+        - docker push skyapm/e2e-container:${TRAVIS_TAG}
+
+    - if: tag IS present
+      stage: build docker image for JDK11
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -f Dockerfile-JDK11 -t e2e-container .
+        - docker tag e2e-container skyapm/e2e-container:jdk11-${TRAVIS_TAG}
         - docker images
         - docker push skyapm/e2e-container:${TRAVIS_TAG}
