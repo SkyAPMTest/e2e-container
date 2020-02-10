@@ -18,6 +18,9 @@ FROM adoptopenjdk/openjdk8:latest
 
 LABEL maintainer="kezhenxu94@apache.org"
 
+RUN ["/usr/bin/apt-get", "update"]
+RUN ["/usr/bin/apt-get", "install", "-y", "gawk"]
+
 ENV SW_HOME=/sw
 ENV ZK_HOME=/zk
 ENV ES_HOME=/es
