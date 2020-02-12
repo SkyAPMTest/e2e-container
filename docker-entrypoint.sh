@@ -16,6 +16,8 @@
 
 #!/usr/bin/env bash
 
+set -e
+
 JAVA_OPTS="${JAVA_OPTS:-"-Xms256M -Xmx512M"}"
 
 export MODE=${MODE:-standalone}
